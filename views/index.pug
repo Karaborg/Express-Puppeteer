@@ -1,0 +1,64 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    title ScreenShot
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+    // Tell the browser to be responsive to screen width
+    meta(content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no', name='viewport')
+
+    center
+      body
+        div
+          button#btnAdd Add URL
+        div
+          table#table
+        div
+          button#btnScreenShot Take Screenshot
+        div
+          table#download
+
+    //jquery
+    script(src='https://code.jquery.com/jquery-3.4.1.min.js')
+    script.
+      var s = 0;
+      var data;
+      var array = [];
+      $('#download').append('<button id="btnDownload">Download</button>')
+
+      $('#btnAdd').click(function (e) {
+        e.preventDefault();
+        $('#table').append('<input id=' + "url_" + s + ' placeholder=' + "EnterURL" + '></input>')
+        s++;
+      })
+      $('#btnScreenShot').click(function (e) {
+        e.preventDefault();
+        data = {
+          lenght: s
+        }
+        for(i = 0; i < s; i++){
+          if(document.getElementById('url_' + i).value != ""){
+            array.push(document.getElementById('url_' + i).value)
+            data['url_' + i] = array[i]
+          }else{
+            console.log("Empty Input")
+            $('#download').empty();
+          }
+        }
+        $.post('/hey', data)
+                  .done(function (returnValue) {
+                    if(returnValue){
+                      console.log("Success")
+                    }
+                  })
+      })
+      $('#btnDownload').click(function (e) {
+          e.preventDefault();
+              console.log("download")
+              $.post('/heyy')
+                  .done(function (returnValue) {
+                    console.log(returnValue)
+                  })
+          })
