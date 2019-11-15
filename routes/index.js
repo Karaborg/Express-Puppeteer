@@ -13,20 +13,22 @@ router.get('/', function(req, res, next) {
 
 router.post('/hey',async function (req, res) {
   var data = req.body;
+  console.log(data)
   try {
     for (let i = 0; i < data.lenght; i++) {
-      console.log("URL #" + (i + 1) + ": " + data['url_' + i])
-      await screenshotService.takeScreenshot(data['url_' + i]);
+      if (data['url_' + i] != "") {
+        console.log("URL #" + (i + 1) + ": " + data['url_' + i])
+        await screenshotService.takeScreenshot(data['url_' + i]);
+      }
     }
     res.send(true)
   } catch (error) {
-    console.log("Error: " + error)
+    console.log("Error hey: " + error)
     res.send(false)
   }
 });
 
 router.post('/heyy', function (req, res) {
-  console.log("here it comes")
   try {
     var zip = new AdmZip();
     zip.addLocalFolder('screenshots');

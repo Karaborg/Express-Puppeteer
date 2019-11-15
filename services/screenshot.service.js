@@ -52,6 +52,8 @@ const takeScreenshot = async (url) => {
   for (let i = 0; i < Screen_X.length; i++) {
     await page.setViewport({ width: Screen_Y[i], height: 100});
     await page.goto(str, {waitUntil: 'networkidle2'});
+
+    // wait
     
     if (i === 0) {
       await page.screenshot({path: path + '/mobile-' + Screen_X[i] + '.png', fullPage: true});
