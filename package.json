@@ -22,6 +22,7 @@
     "pug": "2.0.0-beta11",
     "puppeteer": "^2.0.0",
     "qjuery": "^1.0.0",
-    "request": "^2.69.0"
+    "request": "^2.69.0",
+    "rimraf": "^3.0.0"
   }
 }

@@ -6,6 +6,8 @@ const screenshotService = require("../services/screenshot.service.js");
 const fs = require('fs');
 const AdmZip = require('adm-zip');
 
+var rimraf = require("rimraf");
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -38,7 +40,6 @@ router.post('/heyy', function (req, res) {
     console.log("Error - " + error)
     res.send(false)
   }
-  //deleteFile('screenshots');
   deleteFile();
   console.log("end rar")
 });
@@ -46,10 +47,10 @@ router.post('/heyy', function (req, res) {
 function deleteFile(){
   try {
     if (fs.existsSync('screenshots')){
-      fs.unlinkSync('screenshots')
+      rimraf.sync("screenshots");
     }
   } catch (error) {
-    console.log("silemedim")
+    console.log("silemedim: " + error)
   }
 }
 
