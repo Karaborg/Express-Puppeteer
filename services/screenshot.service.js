@@ -42,7 +42,6 @@ const takeScreenshot = async (url, delayTime) => {
     await page.setViewport({ width: Screen_Y[i], height: 100});
     await page.goto(str, {waitUntil: 'networkidle2'});
 
-    // TODO: Wait for delay
     if(delayTime != 0){
       var time = (delayTime * 1000)
       await page.waitFor(time)
