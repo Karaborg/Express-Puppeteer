@@ -15,15 +15,11 @@ router.get('/', function(req, res, next) {
 
 router.post('/hey',async function (req, res) {
   var data = req.body;
-  console.log(data)
+  console.log(data.url)
   try {
-    for (let i = 0; i < data.lenght; i++) {
-      if (data['url_' + i] != "") {
-        console.log("URL #" + (i + 1) + ": " + data['url_' + i])
-        await screenshotService.takeScreenshot(data['url_' + i]);
-      }
-    }
-    res.send(true)
+    console.log("URL: " + data.url + " with " + data.delay + " seconds delay.")
+    await screenshotService.takeScreenshot(data.url, data.delay)
+    res.send(data.url)
   } catch (error) {
     console.log("Error hey: " + error)
     res.send(false)
@@ -34,7 +30,7 @@ router.post('/heyy', function (req, res) {
   try {
     var zip = new AdmZip();
     zip.addLocalFolder('screenshots');
-    zip.writeZip("../ScreenShots.zip");
+    zip.writeZip("../ScreenShots.zip"); //  TODO: Save Zip to Desktop
     res.send(true)
   } catch (error) {
     console.log("Error - " + error)

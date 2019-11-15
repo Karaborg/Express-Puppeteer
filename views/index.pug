@@ -25,39 +25,36 @@ html
     script(src='toastr/toastr.js')
     script.
       var s = 0;
-      var data;
-      var array = [];
+      var data = [];
 
-      $('#table').append('<input id=' + "url_" + s + ' placeholder="' + " Enter URL to Screenshot" + '", class="input"></input><input id=' + "dn_" + s + ' placeholder="' + " Delay #" + '", type="' + "number" + '", class="inputb"></input>')
+      $('#table').append('<input id=' + "url_" + s + ' placeholder="' + " Enter URL to Screenshot" + '", class="input"></input><input id=' + "delay_" + s + ' placeholder="' + " Delay #" + '", type="' + "number" + '", class="inputb"></input>')
       s++;
 
       $('#btnAdd').click(function (e) {
         e.preventDefault();
-        $('#table').append('<input id=' + "url_" + s + ' placeholder="' + " Enter More URL to Screenshot" + '", class="input"></input><input id=' + "dn_" + s + ' placeholder="' + " Delay #" + '", type="' + "number" + '", class="inputb"></input>')
+        $('#table').append('<input id=' + "url_" + s + ' placeholder="' + " Enter More URL to Screenshot" + '", class="input"></input><input id=' + "delay_" + s + ' placeholder="' + " Delay #" + '", type="' + "number" + '", class="inputb"></input>')
         s++;
       })
       $('#btnScreenShot').click(function (e) {
         e.preventDefault();
-        data = {
-          lenght: s
-        }
         for(i = 0; i < s; i++){
-          var doc = document.getElementById('url_' + i).value;
-          array.push(doc);
+          var doc = document.getElementById('url_' + i).value.trim();
+          var delayNumber = document.getElementById('delay_' + i).value;
+          if(!delayNumber || delayNumber < 0 || delayNumber > 10) {delayNumber = 0}
           if(doc){
             toastr.info("Screenshot for: " + doc);
+            data.push({delay: delayNumber, url: doc})
           }else{
             toastr.info("Empty Input");
           }
-          data['url_' + i] = array[i]
-        }
-        $.post('/hey', data)
+          $.post('/hey', data[i])
                   .done(function (returnValue) {
                     if(returnValue){
                       console.log("Success")
-                      toastr.info("Finished");
+                      toastr.info(returnValue + " Success");
                     }
                   })
+        }
       })
       $('#btnDownload').click(function (e) {
           e.preventDefault();

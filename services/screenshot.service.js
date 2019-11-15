@@ -4,18 +4,7 @@ var fs = require('fs')
 var Screen_Y = [360, 768, 1024, 1280, 1366, 1920];
 var Screen_X = [640, 1024, 768, 754, 768 ,1080];
 
-const takeScreenshot = async (url) => {
-
-  //var browserOptions = new LaunchOptions
-  //{
-    //Headless = false,
-    //ExecutablePath = "C:\\Windows\\SystemApps\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\MicrosoftEdge.exe"
-  //};
-
-  //var browser = await Puppeteer.LaunchAsync(browserOptions);
-  //var page = await browser.NewPageAsync();
-
-  var t = 'C:\Windows\SystemApps\Microsoft.MicrosoftEdge_8wekyb3d8bbwe'
+const takeScreenshot = async (url, delay) => {
 
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -54,6 +43,10 @@ const takeScreenshot = async (url) => {
     await page.goto(str, {waitUntil: 'networkidle2'});
 
     // wait
+    if (delay != 0) {
+      delay = (delay * 1000)
+      await delay(delay);
+    }
     
     if (i === 0) {
       await page.screenshot({path: path + '/mobile-' + Screen_X[i] + '.png', fullPage: true});
