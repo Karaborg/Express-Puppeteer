@@ -8,6 +8,8 @@ const AdmZip = require('adm-zip');
 
 var rimraf = require("rimraf");
 
+var os = require('os')
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -32,13 +34,14 @@ router.post('/heyy', function (req, res) {
   try {
     var zip = new AdmZip();
     zip.addLocalFolder('screenshots');
-    zip.writeZip("../ScreenShots.zip"); //  TODO: Save Zip to Desktop
+    zip.writeZip("../ScreenShots.zip"); //  TODO: Save Zip to Desktop console.log(os.homedir());
+    //zip.writeZip(os.homedir);
     res.send(true)
   } catch (error) {
     console.log("Error - " + error)
     res.send(false)
   }
-  deleteFile();
+  //deleteFile();
 });
 
 function deleteFile(){
