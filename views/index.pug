@@ -41,20 +41,19 @@ html
           var doc = document.getElementById('url_' + i).value.trim();
           var delayNumber = document.getElementById('delay_' + i).value;
           if(!delayNumber || delayNumber < 0 || delayNumber > 10) {delayNumber = 0}
-          if(doc){
-            toastr.info("Screenshot for: " + doc);
-            data.push({delay: delayNumber, url: doc})
-          }else{
-            toastr.info("Empty Input");
-          }
+          if(!doc){toastr.info("Empty Input")}
+          toastr.info("Screenshot for: " + doc);
+          data.push({delay: delayNumber, url: doc})
           $.post('/hey', data[i])
                   .done(function (returnValue) {
                     if(returnValue){
                       console.log("Success")
-                      toastr.info(returnValue + " Success");
+                      toastr.info("Success");
                     }
                   })
         }
+        console.log(data)
+        
       })
       $('#btnDownload').click(function (e) {
           e.preventDefault();

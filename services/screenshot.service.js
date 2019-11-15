@@ -4,7 +4,7 @@ var fs = require('fs')
 var Screen_Y = [360, 768, 1024, 1280, 1366, 1920];
 var Screen_X = [640, 1024, 768, 754, 768 ,1080];
 
-const takeScreenshot = async (url, delay) => {
+const takeScreenshot = async (url, delayTime) => {
 
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -42,10 +42,10 @@ const takeScreenshot = async (url, delay) => {
     await page.setViewport({ width: Screen_Y[i], height: 100});
     await page.goto(str, {waitUntil: 'networkidle2'});
 
-    // wait
-    if (delay != 0) {
-      delay = (delay * 1000)
-      await delay(delay);
+    // TODO: Wait for delay
+    if(delayTime != 0){
+      var time = (delayTime * 1000)
+      await page.waitFor(time)
     }
     
     if (i === 0) {

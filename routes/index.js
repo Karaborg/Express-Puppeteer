@@ -17,9 +17,11 @@ router.post('/hey',async function (req, res) {
   var data = req.body;
   console.log(data.url)
   try {
-    console.log("URL: " + data.url + " with " + data.delay + " seconds delay.")
-    await screenshotService.takeScreenshot(data.url, data.delay)
-    res.send(data.url)
+    if (data.url) {
+      console.log("URL: " + data.url + " with " + data.delay + " seconds delay.")
+      await screenshotService.takeScreenshot(data.url, data.delay)
+    }
+    res.send(true)
   } catch (error) {
     console.log("Error hey: " + error)
     res.send(false)
@@ -37,7 +39,6 @@ router.post('/heyy', function (req, res) {
     res.send(false)
   }
   deleteFile();
-  console.log("end rar")
 });
 
 function deleteFile(){
