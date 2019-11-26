@@ -67,10 +67,6 @@ const takeScreenshot = async (url, delayTime) => {
   await browser.close();
 }
 
-var url_array = [];
-
-var sayi = 0;
-
 const takeSitemapScreenshot = async (url, delayTime) => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -127,9 +123,12 @@ const documenting = async (url, delayTime) => {
     for (let i = 0; i < Screen_X.length; i++) {
       await page.setViewport({ width: Screen_Y[i], height: 100});
       await page.goto(str, {waitUntil: 'networkidle2'});
-  
-      
-      
+
+      if(delayTime != 0){
+        var time = (delayTime * 1000)
+        await page.waitFor(time)
+      }
+
       if (i === 0) {
         await page.screenshot({path: path + '/mobile-' + Screen_X[i] + '.png', fullPage: true});
       }else if(i === 1) {

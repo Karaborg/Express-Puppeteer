@@ -46,7 +46,14 @@ router.post('/heyy', function (req, res) {
 
 router.post('/heyyy',async function (req, res) {
   var data = req.body;
-  await screenshotService.takeSitemapScreenshot(data.url, data.delay)
+  console.log("Sitemap: " + data.url + " with " + data.delay + " seconds delay.")
+  try {
+    await screenshotService.takeSitemapScreenshot(data.url, data.delay)
+    res.send(true)
+  } catch (error) {
+    console.log("TakeSiteMapScreenShotError: " + error)
+    res.send(false)
+  }
 });
 
 function deleteFile(){
