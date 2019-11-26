@@ -34,7 +34,7 @@ router.post('/heyy', function (req, res) {
   try {
     var zip = new AdmZip();
     zip.addLocalFolder('screenshots');
-    zip.writeZip("../ScreenShots.zip"); //  TODO: Save Zip to Desktop console.log(os.homedir());
+    zip.writeZip("../ScreenShots.zip");
     //zip.writeZip(os.homedir);
     res.send(true)
   } catch (error) {
@@ -42,6 +42,12 @@ router.post('/heyy', function (req, res) {
     res.send(false)
   }
   //deleteFile();
+});
+
+router.post('/heyyy',async function (req, res) {
+  var data = req.body;
+  //console.log(data.param)
+  await screenshotService.takeSitemapScreenshot('http://spod.madde22.com/sitemap.xml', 0)
 });
 
 function deleteFile(){

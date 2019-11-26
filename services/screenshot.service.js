@@ -60,9 +60,50 @@ const takeScreenshot = async (url, delayTime) => {
 
   console.log("Done.");
 
-  browser.close();
+  await browser.close();
+}
+
+var url_array = [];
+
+const takeSitemapScreenshot = async (url, delayTime) => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  await page.goto(url, {waitUntil: 'networkidle2'});
+
+  const innerHTML = await page.evaluate(() => document.querySelector('.collapsible-content').innerHTML);
+
+  const text = page.evaluate(() => document.querySelector('.line').textContent);
+
+  // TODO: Get All Span Elements
+  // Get a list of all elements.
+  var styleNumbers = await page.$$('span.text');
+
+  // Print the style numbers.
+  for( let styleNumber of styleNumbers ) {
+      try {
+          console.log( await ( await styleNumber.getProperty( 'innerText' ) ).jsonValue() );
+      }
+      catch( e ) {
+          console.log( `Could not get the style number:`, e.message );
+      }
+  }
+
+  for (let i = 0; i < spans.length; i++) {
+    var string = spans[i],
+    substring1 = '/spod.madde22.com/'
+    if (string.includes(substring1)) {
+      url_array.push(spans[i])
+    }
+  }
+
+  //console.log(innerHTML)
+  //console.log(url_array)
+  //console.log(text)
+
+  console.log("Done.")
 }
 
 module.exports={
-    takeScreenshot
+    takeScreenshot, takeSitemapScreenshot
 }

@@ -19,7 +19,14 @@ html
                     table#table(style='width: 100%')
                   button.button#btnScreenShot Take the Screenshot
                   button.button#btnDownload Download
-                  //div#download 
+        .background
+          .container
+              .screen
+                div
+                  input.input(placeholder=' Enter Sitemap URL', style='width:100%' id='txtSitemap')
+                  button.button#btnSitemap Take the Screenshots
+                  button.button#btnDownload Download          
+
     //jquery
     script(src='https://code.jquery.com/jquery-3.4.1.min.js')
     script(src='toastr/toastr.js')
@@ -53,18 +60,33 @@ html
                   })
         }
         console.log(data)
-        
       })
       $('#btnDownload').click(function (e) {
+        e.preventDefault();
+        $.post('/heyy')
+                .done(function (returnValue) {
+                console.log(returnValue)
+                if(returnValue){
+                  console.log("Downloaded!")
+                  toastr.info("Downloaded!");
+                }else{
+                  toastr.warning("No File to Download")
+                }
+              })
+      })
+      $('#btnSitemap').click(function (e) {
           e.preventDefault();
-              $.post('/heyy')
-                  .done(function (returnValue) {
-                    console.log(returnValue)
+          var doc = document.getElementById('txtSitemap').value.trim();
+          if(!doc) {
+            toastr.info("Empty Input")
+          } else{
+            toastr.info("Screenshot for: " + doc);
+            $.post('/heyyy', {param: doc})
+                    .done(function (returnValue) {
                     if(returnValue){
-                      console.log("Downloaded!")
-                      toastr.info("Downloaded!");
-                    }else{
-                      toastr.warning("No File to Download")
+                      console.log("Success")
+                      toastr.info("Success");
                     }
                   })
-          })
+          }
+      })    
