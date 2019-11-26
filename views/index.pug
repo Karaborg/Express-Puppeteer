@@ -23,9 +23,10 @@ html
           .container
               .screen
                 div
-                  input.input(placeholder=' Enter Sitemap URL', style='width:100%' id='txtSitemap')
+                  div
+                    table#tableSitemap(style='width: 100%')
                   button.button#btnSitemap Take the Screenshots
-                  button.button#btnDownload Download          
+                  button.button#btnDownloadSitemap Download          
 
     //jquery
     script(src='https://code.jquery.com/jquery-3.4.1.min.js')
@@ -36,6 +37,9 @@ html
 
       $('#table').append('<input id=' + "url_" + s + ' placeholder="' + " Enter URL to Screenshot" + '", class="input"></input><input id=' + "delay_" + s + ' placeholder="' + " Delay #" + '", type="' + "number" + '", class="inputb"></input>')
       s++;
+
+      $('#tableSitemap').append('<input id="txtSitemap" placeholder="' + " Enter Sitemap URL to Screenshot" + '", class="input"></input><input id="txtSitemapDelay" placeholder="' + " Delay #" + '", type="' + "number" + '", class="inputb"></input>')
+
 
       $('#btnAdd').click(function (e) {
         e.preventDefault();
@@ -74,14 +78,29 @@ html
                 }
               })
       })
+      $('#btnDownloadSitemap').click(function (e) {
+        e.preventDefault();
+        $.post('/heyy')
+                .done(function (returnValue) {
+                console.log(returnValue)
+                if(returnValue){
+                  console.log("Downloaded!")
+                  toastr.info("Downloaded!");
+                }else{
+                  toastr.warning("No File to Download")
+                }
+              })
+      })
       $('#btnSitemap').click(function (e) {
           e.preventDefault();
           var doc = document.getElementById('txtSitemap').value.trim();
+          var time = document.getElementById('txtSitemapDelay').value.trim();
+          if(!time || time < 0 || time > 10) {time = 0}
           if(!doc) {
             toastr.info("Empty Input")
           } else{
             toastr.info("Screenshot for: " + doc);
-            $.post('/heyyy', {param: doc})
+            $.post('/heyyy', {url: doc, delay: time})
                     .done(function (returnValue) {
                     if(returnValue){
                       console.log("Success")

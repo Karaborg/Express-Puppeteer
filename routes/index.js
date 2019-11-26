@@ -41,13 +41,12 @@ router.post('/heyy', function (req, res) {
     console.log("Error - " + error)
     res.send(false)
   }
-  //deleteFile();
+  deleteFile();
 });
 
 router.post('/heyyy',async function (req, res) {
   var data = req.body;
-  //console.log(data.param)
-  await screenshotService.takeSitemapScreenshot('http://spod.madde22.com/sitemap.xml', 0)
+  await screenshotService.takeSitemapScreenshot(data.url, data.delay)
 });
 
 function deleteFile(){

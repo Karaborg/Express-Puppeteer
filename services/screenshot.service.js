@@ -16,25 +16,29 @@ const takeScreenshot = async (url, delayTime) => {
   }
 
   // Divide URL
+  var path;
   var str = new String(url);
   var splits = str.split("/");
-  var ret = splits[4].replace('.html','');
 
+  // Create ScreenShot Folder
+  var dir = process.env.SCREENSHOT_PATH;
+  if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+  }
+
+  // Create splits[3] folders if exiest
+  if (splits[3] == "") {splits[3] = 'main'}
   if (!fs.existsSync(dir + '/' + splits[3])){
     fs.mkdirSync(dir + '/' + splits[3]);
+    path = dir + '/' + splits[3];
   }
 
-  // Make the Path
-  var path;
-  if(splits[4] != "") {
-    path = process.env.SCREENSHOT_PATH + '/' + splits[3] + '/' + ret;
-  }else{
-    path = process.env.SCREENSHOT_PATH + '/' + splits[3] + '/main';
-  }
-
-  // Create the Path Folder
-  if (!fs.existsSync(path)){
-    fs.mkdirSync(path);
+  // Create splits[4] folders inside splits[3]
+  if (splits[4]) {
+    if (!fs.existsSync(dir + '/' + splits[3] + '/' + splits[4])){
+      fs.mkdirSync(dir + '/' + splits[3] + '/' + splits[4]);
+      path = dir + '/' + splits[3] + '/' + splits[4];
+    }
   }
 
   // ScreenShot Method
@@ -65,45 +69,83 @@ const takeScreenshot = async (url, delayTime) => {
 
 var url_array = [];
 
+var sayi = 0;
+
 const takeSitemapScreenshot = async (url, delayTime) => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
   await page.goto(url, {waitUntil: 'networkidle2'});
 
-  const innerHTML = await page.evaluate(() => document.querySelector('.collapsible-content').innerHTML);
-
-  const text = page.evaluate(() => document.querySelector('.line').textContent);
-
-  // TODO: Get All Span Elements
-  // Get a list of all elements.
   var styleNumbers = await page.$$('span.text');
 
-  // Print the style numbers.
   for( let styleNumber of styleNumbers ) {
       try {
-          console.log( await ( await styleNumber.getProperty( 'innerText' ) ).jsonValue() );
-      }
-      catch( e ) {
-          console.log( `Could not get the style number:`, e.message );
+          var string = await ( await styleNumber.getProperty( 'innerText' ) ).jsonValue();
+          substring1 = '/spod.madde22.com/'
+          if (string.includes(substring1)) {
+            documenting(string, delayTime)
+          }
+      } catch (e) {
+          console.log("Span Error: " + e);
       }
   }
+}
 
-  for (let i = 0; i < spans.length; i++) {
-    var string = spans[i],
-    substring1 = '/spod.madde22.com/'
-    if (string.includes(substring1)) {
-      url_array.push(spans[i])
+const documenting = async (url, delayTime) => {
+  // Divide URL
+  var path;
+  var str = new String(url);
+  var splits = str.split("/");
+
+  // Create ScreenShot Folder
+  var dir = process.env.SCREENSHOT_PATH;
+  if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+  }
+
+  // Create splits[3] folders if exiest
+  if (splits[3] == "") {splits[3] = 'main'}
+  if (!fs.existsSync(dir + '/' + splits[3])){
+    fs.mkdirSync(dir + '/' + splits[3]);
+    path = dir + '/' + splits[3];
+  }
+
+  // Create splits[4] folders inside splits[3]
+  if (splits[4]) {
+    if (!fs.existsSync(dir + '/' + splits[3] + '/' + splits[4])){
+      fs.mkdirSync(dir + '/' + splits[3] + '/' + splits[4]);
+      path = dir + '/' + splits[3] + '/' + splits[4];
     }
   }
 
-  //console.log(innerHTML)
-  //console.log(url_array)
-  //console.log(text)
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
 
-  console.log("Done.")
+  // Screenshot
+  try {
+    for (let i = 0; i < Screen_X.length; i++) {
+      await page.setViewport({ width: Screen_Y[i], height: 100});
+      await page.goto(str, {waitUntil: 'networkidle2'});
+  
+      
+      
+      if (i === 0) {
+        await page.screenshot({path: path + '/mobile-' + Screen_X[i] + '.png', fullPage: true});
+      }else if(i === 1) {
+        await page.screenshot({path: path + '/tablet-' + Screen_X[i] + '-dikey.png', fullPage: true});
+      }else if(i === 2){
+        await page.screenshot({path: path + '/tablet-' + Screen_X[i] + '-yatay.png', fullPage: true});
+      }else{
+        await page.screenshot({path: path + '/' + Screen_Y[i] + '.png', fullPage: true});
+      }
+    }
+  } catch (error) {
+    console.log("Screenshot Error For: " + path + "Details: " + error)
+  }
+  await browser.close();
 }
 
 module.exports={
-    takeScreenshot, takeSitemapScreenshot
+    takeScreenshot, takeSitemapScreenshot, documenting
 }
