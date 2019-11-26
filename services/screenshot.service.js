@@ -73,12 +73,12 @@ const takeSitemapScreenshot = async (url, delayTime) => {
 
   await page.goto(url, {waitUntil: 'networkidle2'});
 
-  var styleNumbers = await page.$$('span.text');
+  var styleNumbers = await page.$$(process.env.SITEMAP_ELEMENT + '.' +process.env.SITEMAP_ELEMENT_CLASS);
 
   for( let styleNumber of styleNumbers ) {
       try {
           var string = await ( await styleNumber.getProperty( 'innerText' ) ).jsonValue();
-          substring1 = '/spod.madde22.com/'
+          substring1 = process.env.SITEMAP_KEY;
           if (string.includes(substring1)) {
             documenting(string, delayTime)
           }
@@ -122,7 +122,7 @@ const documenting = async (url, delayTime) => {
   try {
     for (let i = 0; i < Screen_X.length; i++) {
       await page.setViewport({ width: Screen_Y[i], height: 100});
-      await page.goto(str, {waitUntil: 'networkidle2'});
+      await page.goto(str, {waitUntil: 'networkidle2', timeout: 3000000});
 
       if(delayTime != 0){
         var time = (delayTime * 1000)
@@ -140,7 +140,7 @@ const documenting = async (url, delayTime) => {
       }
     }
   } catch (error) {
-    console.log("Screenshot Error For: " + path + "Details: " + error)
+    console.log("Screenshot Error For: " + path + " Details: " + error)
   }
   await browser.close();
 }
