@@ -115,7 +115,7 @@ const documenting = async (url, delayTime) => {
     }
   }
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ args: ['--disable-gpu', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'] });
   const page = await browser.newPage();
 
   // Screenshot
